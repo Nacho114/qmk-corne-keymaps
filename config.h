@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MASTER_LEFT
                          
 #define COMBO_COUNT 2
+#define COMBO_TERM 10 
                          
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350
