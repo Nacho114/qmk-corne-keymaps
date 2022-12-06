@@ -29,20 +29,6 @@ enum userspace_layers {
 };
 
 //-------------------------------------------
-//---------------- TAP DANCE 
-//-------------------------------------------
-
-//Tap Dance Declarations
-enum {
-  TD_CMD_MENU = 0
-};
-
-//Tap Dance Definitions
-qk_tap_dance_action_t tap_dance_actions[] = {
-  [TD_CMD_MENU]  = ACTION_TAP_DANCE_LAYER_TOGGLE(KC_LGUI, _MENU),
-};
-
-//-------------------------------------------
 //---------------- COMBO
 //-------------------------------------------
 
@@ -69,17 +55,14 @@ void matrix_scan_user(void) {
       register_code(KC_LGUI);
       register_code(KC_LSFT);
       register_code(KC_4);
-      unregister_code(KC_LGUI);
-      unregister_code(KC_LSFT);
-      unregister_code(KC_4);
+      clear_keyboard();
     }
 
     // Alt+space -> search alfred osx
     SEQ_TWO_KEYS(KC_F, KC_D) {
       register_code(KC_LALT);
       register_code(KC_SPC);
-      unregister_code(KC_LALT);
-      unregister_code(KC_SPC);
+      clear_keyboard();
     }
 
     SEQ_TWO_KEYS(KC_G, KC_S) {
@@ -98,6 +81,21 @@ void matrix_scan_user(void) {
 }
 
 //-------------------------------------------
+//---------------- MACROS
+//-------------------------------------------
+
+enum custom_keycodes {
+    S_QK_LEAD = SAFE_RANGE,
+};
+
+// If in a layer other than default, using S_QK_LEAD 
+// will switch to the default layer and press QK_LEAD.
+void s_qk_lead_macro(void) {
+    layer_clear();
+    qk_leader_start();
+};
+
+//-------------------------------------------
 //---------------- LAYOUT
 //-------------------------------------------
 
@@ -105,25 +103,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QWERTY] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
+LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                          KC_LALT, TD(TD_CMD_MENU), LT(_NUM, KC_BSPC),   LT(_SYM, KC_ENT),  KC_SPC,  QK_LEAD
+                             KC_LALT, KC_LGUI,  LT(_NUM, KC_BSPC),   LT(_SYM, KC_ENT),  KC_SPC,  QK_LEAD
                                       //`--------------------------'  `--------------------------'
 	),
 
 	[_COLEMAKDH] = LAYOUT(
 	//,-----------------------------------------------------.                    ,-----------------------------------------------------.
-	    KC_TAB, 	 KC_Q, 	  KC_W, 	KC_F,    KC_P,    KC_B, 					                KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_BSPC,
+LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_BSPC,
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-	    KC_LCTL,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G, 						            KC_M,    KC_N,    KC_E,    KC_I,   KC_O,  KC_SCLN,
+      KC_LCTL,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G, 						            KC_M,    KC_N,    KC_E,    KC_I,   KC_O,  KC_SCLN,
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
 		  KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
 	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                          KC_LALT, TD(TD_CMD_MENU), LT(_NUM, KC_BSPC),   LT(_SYM, KC_ENT),  KC_SPC,  QK_LEAD
+                             KC_LALT, KC_LGUI,  LT(_NUM, KC_BSPC),   LT(_SYM, KC_ENT),  KC_SPC,  QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -135,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______,   TO(0),      TO(0), _______, _______
+                                          _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -147,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                      KC_MINS, KC_PLUS,KC_EQUAL, KC_LBRC, KC_RBRC, KC_PIPE,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______,   TO(0),      TO(0), _______, _______
+                                          _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -157,9 +155,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO, RGB_TOG, RGB_VAD, RGB_VAI,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
- _______, DF(_QWERTY), DF(_COLEMAKDH), KC_NO, KC_NO, KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  QK_RBT, DF(_QWERTY), DF(_COLEMAKDH), KC_NO, KC_NO, KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______,   TO(0),      TO(0), _______, _______
+                                          _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -329,6 +327,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     set_keylog(keycode, record);
   }
+  // Handle macros 
+  switch (keycode) {
+    case S_QK_LEAD:
+        if (record->event.pressed) {
+          s_qk_lead_macro();
+          // Important! 
+          // If true is returned, then the macro keycode would also be returned
+          // which will interfere with the leader behavior (although it could also
+          // be a feature if it is part of the leader sequence).
+          return false; 
+        } 
+        break;
+    }
+
   return true;
 }
 #endif // OLED_ENABLE
