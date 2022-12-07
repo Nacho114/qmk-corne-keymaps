@@ -20,9 +20,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdio.h>
 
 enum userspace_layers {
-   _DEFAULTS = 0, //This is required.
-   _QWERTY = 0,
-   _COLEMAKDH,
+   _DEFAULTS = 0,    // This is required.
+   _COLEMAKDHM = 0,  // Default layout
+   _QWERTY,
    _NUM,
    _SYM,
    _MENU,
@@ -33,10 +33,12 @@ enum userspace_layers {
 //-------------------------------------------
 
 const uint16_t PROGMEM combo_kj[] = {KC_K, KC_J, COMBO_END};
-const uint16_t PROGMEM combo_ni[] = {KC_N, KC_I, COMBO_END};
+const uint16_t PROGMEM combo_ei[] = {KC_E, KC_I, COMBO_END};
+// COMBO_COUNT is set in config.h
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo_kj, KC_ESC),
-    COMBO(combo_ni, KC_ESC), 
+    // TODO: there might be a better combo...
+    COMBO(combo_ei, KC_ESC), 
 };
 
 //-------------------------------------------
@@ -101,6 +103,18 @@ void s_qk_lead_macro(void) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
+  [_COLEMAKDHM] = LAYOUT(
+	//,-----------------------------------------------------.                    ,-----------------------------------------------------.
+LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_BSPC,
+	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_LCTL,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G, 						            KC_M,    KC_N,    KC_E,    KC_I,   KC_O,  KC_SCLN,
+	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+		  KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
+	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                               KC_LALT, LT(_NUM, KC_BSPC), KC_LGUI,     KC_ENT,  LT(_SYM, KC_SPC),  QK_LEAD
+                                      //`--------------------------'  `--------------------------'
+  ),
+
   [_QWERTY] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
 LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
@@ -109,27 +123,15 @@ LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                             KC_LALT, KC_LGUI,  LT(_NUM, KC_BSPC),   LT(_SYM, KC_ENT),  KC_SPC,  QK_LEAD
+                               KC_LALT, LT(_NUM, KC_BSPC), KC_LGUI,     KC_ENT,  LT(_SYM, KC_SPC),  QK_LEAD
                                       //`--------------------------'  `--------------------------'
 	),
-
-	[_COLEMAKDH] = LAYOUT(
-	//,-----------------------------------------------------.                    ,-----------------------------------------------------.
-LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_BSPC,
-	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G, 						            KC_M,    KC_N,    KC_E,    KC_I,   KC_O,  KC_SCLN,
-	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-		  KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
-	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                             KC_LALT, KC_LGUI,  LT(_NUM, KC_BSPC),   LT(_SYM, KC_ENT),  KC_SPC,  QK_LEAD
-                                      //`--------------------------'  `--------------------------'
-  ),
-
+	
   [_NUM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      QK_LEAD,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
+      _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                      KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT,   KC_NO,   KC_NO,
+      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO, KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT,   KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -155,7 +157,7 @@ LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              K
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO, RGB_TOG, RGB_VAD, RGB_VAI,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-  QK_RBT, DF(_QWERTY), DF(_COLEMAKDH), KC_NO, KC_NO, KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  QK_RBT, DF(_QWERTY), DF(_COLEMAKDHM), KC_NO, KC_NO, KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
@@ -210,11 +212,11 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 void oled_render_layer_state(void) {
     oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(default_layer_state|layer_state)) {
+        case _COLEMAKDHM:
+            oled_write_ln_P(PSTR("COLEMAK-DHm"), false);
+            break;
         case _QWERTY:
             oled_write_ln_P(PSTR("QWERTY"), false);
-            break;
-        case _COLEMAKDH:
-            oled_write_ln_P(PSTR("COLEMAK-DH"), false);
             break;
         case _NUM:
             oled_write_ln_P(PSTR("Numbers"), false);

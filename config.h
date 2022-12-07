@@ -21,9 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #define MASTER_LEFT
+
+#define TAPPING_TERM 135 // Any tap that’s shorter than 200ms will be a tap
                          
-#define COMBO_COUNT 2
-#define COMBO_TERM 10 
+#define COMBO_COUNT 2 // number of combo's defined
+#define COMBO_TERM 10 // timeout for the Combos to be recognized
                          
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350
