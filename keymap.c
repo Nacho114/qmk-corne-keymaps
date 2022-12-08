@@ -32,18 +32,32 @@ enum userspace_layers {
 //---------------- COMBO
 //-------------------------------------------
 
-const uint16_t PROGMEM combo_kj[] = {KC_K, KC_J, COMBO_END};
 const uint16_t PROGMEM combo_ei[] = {KC_E, KC_I, COMBO_END};
 // COMBO_COUNT is set in config.h
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(combo_kj, KC_ESC),
-    // TODO: there might be a better combo...
     COMBO(combo_ei, KC_ESC), 
 };
 
 //-------------------------------------------
 //---------------- Leader
 //-------------------------------------------
+
+// Handler for cmd tab mode
+
+bool leader_in_cmd_tab_mode;
+
+void handle_leader_in_cmd_tab_mode(uint16_t keycode) {
+  if (!leader_in_cmd_tab_mode) {
+    return;
+  }
+
+  if (keycode != KC_ENT && keycode != KC_ESC) {
+    return;
+  }
+
+  leader_in_cmd_tab_mode = false; 
+  clear_keyboard();
+}
 
 LEADER_EXTERNS();
 
@@ -52,6 +66,44 @@ void matrix_scan_user(void) {
     leading = false;
     leader_end();
 
+    // osx navigate space left
+    SEQ_ONE_KEY(KC_N) {
+      register_code(KC_LGUI);
+      register_code(KC_LCTL);
+      register_code(KC_H);
+      clear_keyboard();
+    }
+
+    // osx navigate space right
+    SEQ_ONE_KEY(KC_O) {
+      register_code(KC_LGUI);
+      register_code(KC_LCTL);
+      register_code(KC_L);
+      clear_keyboard();
+    }
+
+    // osx navigate with tab to other apps
+    SEQ_ONE_KEY(KC_TAB) {
+      register_code(KC_LGUI);
+      register_code(KC_TAB);
+      unregister_code(KC_TAB);
+      leader_in_cmd_tab_mode = true; 
+    }
+
+    // osx toggle apps
+    SEQ_ONE_KEY(KC_T) {
+      register_code(KC_LGUI);
+      register_code(KC_TAB);
+      clear_keyboard();
+    }
+
+    // Alt+space -> search alfred osx
+    SEQ_ONE_KEY(KC_F) {
+      register_code(KC_LALT);
+      register_code(KC_SPC);
+      clear_keyboard();
+    }
+
     // osx screen shot
     SEQ_TWO_KEYS(KC_S, KC_S) {
       register_code(KC_LGUI);
@@ -59,14 +111,7 @@ void matrix_scan_user(void) {
       register_code(KC_4);
       clear_keyboard();
     }
-
-    // Alt+space -> search alfred osx
-    SEQ_TWO_KEYS(KC_F, KC_D) {
-      register_code(KC_LALT);
-      register_code(KC_SPC);
-      clear_keyboard();
-    }
-
+    
     SEQ_TWO_KEYS(KC_G, KC_S) {
       layer_on(_SYM);
     }
@@ -109,9 +154,9 @@ LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              K
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_R,    KC_S,    KC_T,    KC_G, 						            KC_M,    KC_N,    KC_E,    KC_I,   KC_O,  KC_SCLN,
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-		  KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
+		  KC_LALT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
 	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                               KC_LALT, LT(_NUM, KC_BSPC), KC_LGUI,     KC_ENT,  LT(_SYM, KC_SPC),  QK_LEAD
+                               KC_LGUI, LT(_NUM, KC_BSPC), KC_LSFT,     KC_ENT,  LT(_SYM, KC_SPC),  QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -121,7 +166,7 @@ LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_NUBS,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                KC_LALT, LT(_NUM, KC_BSPC), KC_LGUI,     KC_ENT,  LT(_SYM, KC_SPC),  QK_LEAD
                                       //`--------------------------'  `--------------------------'
@@ -143,9 +188,9 @@ LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       KC_TILD, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_GRV,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                      KC_UNDS,   KC_LT,   KC_GT, KC_LCBR, KC_RCBR, KC_QUES,
+       KC_GRV,   KC_LT,   KC_GT,KC_EQUAL, KC_PLUS, KC_MINS,                      KC_UNDS, KC_LCBR, KC_RCBR, KC_LBRC, KC_RBRC, KC_COLN,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                      KC_MINS, KC_PLUS,KC_EQUAL, KC_LBRC, KC_RBRC, KC_PIPE,
+      _______,   KC_NO,   KC_NO,   KC_NO, KC_QUOT,   KC_NO,                        KC_NO,  KC_DQT,   KC_NO,   KC_NO, KC_QUES, KC_PIPE,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
@@ -155,7 +200,7 @@ LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______, KC_BRMD, KC_BRMU,   KC_NO,   KC_NO,   KC_NO,                      KC_MPRV, KC_MPLY, KC_MNXT, KC_MUTE, KC_VOLD, KC_VOLU,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO, RGB_TOG, RGB_VAD, RGB_VAI,
+      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,    KC_NO,  KC_NO, RGB_TOG, RGB_VAD, RGB_VAI,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
   QK_RBT, DF(_QWERTY), DF(_COLEMAKDHM), KC_NO, KC_NO, KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -251,6 +296,11 @@ void set_keylog(uint16_t keycode, keyrecord_t *record) {
     name = code_to_name[keycode];
   }
 
+  if (leader_in_cmd_tab_mode) {
+    snprintf(keylog_str, sizeof(keylog_str), "\nMode: cmd+tab");
+    return; 
+  }
+
   // update keylog
   snprintf(keylog_str, sizeof(keylog_str), "\n%dx%d, k%2d : %c",
            record->event.key.row, record->event.key.col,
@@ -328,6 +378,7 @@ bool oled_task_user(void) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     set_keylog(keycode, record);
+    handle_leader_in_cmd_tab_mode(keycode);
   }
   // Handle macros 
   switch (keycode) {
