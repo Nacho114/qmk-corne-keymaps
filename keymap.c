@@ -25,6 +25,7 @@ enum userspace_layers {
    _QWERTY,
    _NUM,
    _SYM,
+   _NAV,
    _MENU,
 };
 
@@ -33,9 +34,13 @@ enum userspace_layers {
 //-------------------------------------------
 
 const uint16_t PROGMEM combo_ei[] = {KC_E, KC_I, COMBO_END};
+const uint16_t PROGMEM combo_uy[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM combo_nav_up_down[] = {KC_DOWN, KC_UP, COMBO_END};
 // COMBO_COUNT is set in config.h
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo_ei, KC_ESC), 
+    COMBO(combo_uy, KC_ESC), 
+    COMBO(combo_nav_up_down, KC_ESC), 
 };
 
 //-------------------------------------------
@@ -148,7 +153,7 @@ void s_qk_lead_macro(void) {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-  [_COLEMAKDHM] = LAYOUT(
+  [_COLEMAKDHM] = LAYOUT_split_3x6_3(
 	//,-----------------------------------------------------.                    ,-----------------------------------------------------.
 LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              KC_J,    KC_L,    KC_U,    KC_Y, KC_QUOT, KC_BSPC,
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -156,7 +161,7 @@ LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              K
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
 		  KC_LALT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
 	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                               KC_LGUI, LT(_NUM, KC_BSPC), KC_LSFT,     KC_ENT,  LT(_SYM, KC_SPC),  QK_LEAD
+                               TO(_NAV), LT(_NUM, KC_BSPC), KC_LGUI,       SFT_T(KC_ENT),  LT(_SYM, KC_SPC),  QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -174,11 +179,11 @@ LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     
 	
   [_NUM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
+      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO, KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT,   KC_NO,
+      _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0,   KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+      _______,   KC_NO,   KC_NO, KC_PPLS, KC_PMNS,   KC_NO,                        KC_NO, KC_PEQL, KC_PAST, KC_PSLS,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
@@ -186,11 +191,23 @@ LT(_MENU,KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                     
 
   [_SYM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_TILD, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
+      _______, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_GRV,   KC_LT,   KC_GT,KC_EQUAL, KC_PLUS, KC_MINS,                      KC_UNDS, KC_LCBR, KC_RCBR, KC_LBRC, KC_RBRC, KC_COLN,
+      _______,   KC_LT,   KC_GT, KC_LPRN, KC_RPRN, KC_QUES,                      KC_COLN, KC_LCBR, KC_RCBR, KC_LBRC, KC_RBRC,   KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,   KC_NO,   KC_NO,   KC_NO, KC_QUOT,   KC_NO,                        KC_NO,  KC_DQT,   KC_NO,   KC_NO, KC_QUES, KC_PIPE,
+      _______, KC_PSLS, KC_PIPE, KC_BSLS, KC_UNDS, KC_TILD,                        KC_NO,  KC_DQT,  KC_QUOT, KC_GRV,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
+                                      //`--------------------------'  `--------------------------'
+  ),
+
+  [_NAV] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, _______, _______, _______, _______, _______,                      _______, KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______,   TO(0),      TO(0), _______, S_QK_LEAD
                                       //`--------------------------'  `--------------------------'
@@ -234,6 +251,9 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     case _MENU:
         rgblight_sethsv_noeeprom(HSV_RED);
         break;
+    case _NAV:
+        rgblight_sethsv_noeeprom(HSV_PINK);
+        break;
     default: 
         rgblight_sethsv_noeeprom(HSV_CYAN);
         break;
@@ -271,6 +291,9 @@ void oled_render_layer_state(void) {
             break;
         case _MENU:
             oled_write_ln_P(PSTR("Menu"), false);
+            break;
+        case _NAV:
+            oled_write_ln_P(PSTR("Navigation"), false);
             break;
         default:
             oled_write_ln_P(PSTR("Undefined! :("), false);

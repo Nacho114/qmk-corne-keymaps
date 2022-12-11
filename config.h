@@ -22,10 +22,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MASTER_LEFT
 
+// Make tapping + hold keys work better
 #define TAPPING_TERM 160 // Any tap that’s shorter than 200ms will be a tap
+// To make tapping + hold work nicely these two help a lot, there are more such features in the doc.
+#define HOLD_ON_OTHER_KEY_PRESS // if you press another key, the hold version will be activated even inside tapping term.
+#define RETRO_TAPPING // releasing the key without pressing another will send the original keycode even if it is outside the tapping term.
+   
+// How many times you need to tap to toggle TT(_LAYER)
+#define TAPPING_TOGGLE 2
                          
-#define COMBO_COUNT 1 // number of combo's defined
-#define COMBO_TERM 10 // timeout for the Combos to be recognized
+#define COMBO_COUNT 3 // number of combo's defined
+#define COMBO_TERM 120 // timeout for the Combos to be recognized
                          
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 350
