@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // How many times you need to tap to toggle TT(_LAYER)
 #define TAPPING_TOGGLE 2
                          
-#define COMBO_COUNT 3 // number of combo's defined
+#define COMBO_COUNT 1 // number of combo's defined
 #define COMBO_TERM 120 // timeout for the Combos to be recognized
                          
 #define LEADER_PER_KEY_TIMING
