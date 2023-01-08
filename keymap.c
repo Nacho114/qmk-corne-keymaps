@@ -113,9 +113,9 @@ LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              K
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_R,    KC_S,     KC_T,   KC_G, 						            KC_M,    KC_N,    KC_E,    KC_I,   KC_O,  KC_SCLN,
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-		  KC_LALT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
+		  KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
 	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                      LT(_NAV, KC_ESC), LT(_NUM, KC_BSPC), KC_LGUI,       SFT_T(KC_ENT),  LT(_SYM, KC_SPC),  QK_LEAD
+                      LT(_NAV, KC_ESC), LT(_NUM, KC_BSPC), KC_LGUI,       LALT_T(KC_ENT),  LT(_SYM, KC_SPC),  QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
