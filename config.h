@@ -29,9 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RETRO_TAPPING // releasing the key without pressing another will send the original keycode even if it is outside the tapping term.
    
 // How many times you need to tap to toggle TT(_LAYER)
-#define TAPPING_TOGGLE 2
+#define TAPPING_TOGGLE 1
                          
-#define COMBO_COUNT 1 // number of combo's defined
+#define COMBO_COUNT 2 // number of combo's defined
 #define COMBO_TERM 120 // timeout for the Combos to be recognized
                          
 #define LEADER_PER_KEY_TIMING
