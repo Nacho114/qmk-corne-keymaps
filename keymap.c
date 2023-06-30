@@ -118,7 +118,7 @@ LT(_MENU,KC_TAB), KC_Q,	   KC_W,   	KC_F,    KC_P,    KC_B, 					              K
 	//|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
 	KC_LSFT,LALT_T(KC_Z),    KC_X,    KC_C,    KC_D,    KC_V, 						            KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH, KC_BSLS,
 	//|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                      TT(_NAV), LT(_NUM, KC_BSPC), KC_LGUI,       LALT_T(KC_ENT),  LT(_SYM, KC_SPC),  QK_LEAD
+                      MO(_NAV), LT(_NUM, KC_BSPC), KC_LGUI,       LALT_T(KC_ENT),  LT(_SYM, KC_SPC),  QK_LEAD
                                       //`--------------------------'  `--------------------------'
   ),
 
